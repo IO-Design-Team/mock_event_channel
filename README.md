@@ -6,7 +6,7 @@ Adds `setMockStreamHandler` to `TestDefaultBinaryMessenger` with an extension
 
 ## Usage
 
-<!-- embedme readme/usage.dart -->
+<!-- embedme example/example.dart -->
 ```dart
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
