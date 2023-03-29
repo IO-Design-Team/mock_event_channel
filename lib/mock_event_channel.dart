@@ -33,7 +33,7 @@ extension TestEventChannelExtension on TestDefaultBinaryMessenger {
     );
     sub.onError((e) {
       if (e is! PlatformException) {
-        throw e;
+        throw ArgumentError('Stream error must be a PlatformException');
       }
       channel.binaryMessenger.handlePlatformMessage(
         channel.name,
@@ -49,6 +49,7 @@ extension TestEventChannelExtension on TestDefaultBinaryMessenger {
       () => channel.binaryMessenger
           .handlePlatformMessage(channel.name, null, null),
     );
+    addTearDown(sub.cancel);
   }
 }
 
