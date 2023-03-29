@@ -67,6 +67,30 @@ abstract class MockStreamHandler {
   void onCancel(dynamic arguments);
 }
 
+/// Convenience class for creating a [MockStreamHandler] inline.
+class InlineMockStreamHandler extends MockStreamHandler {
+  /// Create a new [InlineMockStreamHandler] with the given [onListen] and
+  /// [onCancel] handlers.
+  InlineMockStreamHandler({
+    required void Function(dynamic arguments, MockStreamHandlerEventSink events)
+        onListen,
+    void Function(dynamic arguments)? onCancel,
+  })  : _onListenInline = onListen,
+        _onCancelInline = onCancel;
+
+  final void Function(dynamic arguments, MockStreamHandlerEventSink events)
+      _onListenInline;
+
+  final void Function(dynamic arguments)? _onCancelInline;
+
+  @override
+  void onListen(dynamic arguments, MockStreamHandlerEventSink events) =>
+      _onListenInline(arguments, events);
+
+  @override
+  void onCancel(dynamic arguments) => _onCancelInline?.call(arguments);
+}
+
 /// A mock event sink for a [MockStreamHandler]
 class MockStreamHandlerEventSink {
   final EventSink<dynamic> _sink;
