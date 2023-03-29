@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 extension TestEventChannelExtension on EventChannel {
   /// Set a mock stream handler for this channel
   void setMockStreamHandler(MockStreamHandler handler) {
-    final controller = StreamController<Object>();
+    final controller = StreamController<dynamic>();
 
     MethodChannel(name, codec).setMockMethodCallHandler((call) async {
       switch (call.method) {
@@ -24,24 +24,27 @@ extension TestEventChannelExtension on EventChannel {
     });
 
     final sub = controller.stream.listen(
-      (e) => binaryMessenger.send(name, codec.encodeSuccessEnvelope(e)),
+      (e) => binaryMessenger.handlePlatformMessage(
+        name,
+        codec.encodeSuccessEnvelope(e),
+        null,
+      ),
     );
     sub.onError((e) {
       if (e is! PlatformException) {
         throw e;
       }
-      binaryMessenger.send(
+      binaryMessenger.handlePlatformMessage(
         name,
         codec.encodeErrorEnvelope(
           code: e.code,
           message: e.message,
           details: e.details,
         ),
+        null,
       );
     });
-    sub.onDone(
-      () => binaryMessenger.send(name, codec.encodeSuccessEnvelope(null)),
-    );
+    sub.onDone(() => binaryMessenger.handlePlatformMessage(name, null, null));
   }
 }
 
@@ -55,14 +58,14 @@ abstract class MockStreamHandler {
 }
 
 /// A mock event sink for a [MockStreamHandler]
-class  MockStreamHandlerEventSink {
-  final EventSink<Object> _sink;
+class MockStreamHandlerEventSink {
+  final EventSink<dynamic> _sink;
 
   /// Constructor
   MockStreamHandlerEventSink(this._sink);
 
   /// Send a success event
-  void success(Object event) => _sink.add(event);
+  void success(dynamic event) => _sink.add(event);
 
   /// Send an error event
   void error({

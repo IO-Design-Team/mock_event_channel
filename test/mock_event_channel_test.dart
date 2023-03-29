@@ -5,16 +5,23 @@ import 'package:mock_event_channel/mock_event_channel.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('No arguments', (tester) async{
+  test('No arguments', () {
     const channel = EventChannel('mock_event_channel');
     channel.setMockStreamHandler(StreamHandler());
 
     final stream = channel.receiveBroadcastStream();
-    stream.listen(print);
-    await expectLater(
+    final sub = stream.listen(print);
+    sub.onError((e) => print('asdfsdfkdfjksfd'));
+    expectLater(
       stream,
       emitsInOrder(
-        ['asdf', emitsError(PlatformException(code: 'asdf')), emitsDone],
+        [
+          'asdf',
+          emitsError(
+            isA<PlatformException>().having((e) => e.code, 'code', 'asdf'),
+          ),
+          emitsDone
+        ],
       ),
     );
   });
