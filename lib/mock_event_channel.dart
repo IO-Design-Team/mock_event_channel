@@ -54,6 +54,7 @@ extension TestEventChannelExtension on TestDefaultBinaryMessenger {
       () => channel.binaryMessenger
           .handlePlatformMessage(channel.name, null, null),
     );
+    addTearDown(controller.close);
     addTearDown(sub.cancel);
   }
 }
