@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// Extension on [EventChannel] to allow mocking of the stream
+/// Extension to allow mocking of [EventChannel] streams
 extension TestEventChannelExtension on TestDefaultBinaryMessenger {
   /// Set a mock stream handler for this channel
   void setMockStreamHandler(EventChannel channel, MockStreamHandler handler) {
