@@ -1,7 +1,7 @@
 name: mock_event_channel
 description: Temporary package to add support for mocking EventChannels in Flutter
 version: 0.0.1
-homepage:
+homepage: https://github.com/Rexios80/mock_event_channel
 
 environment:
   sdk: ">=2.19.0 <3.0.0"
