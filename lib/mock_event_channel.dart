@@ -4,12 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Extension on [EventChannel] to allow mocking of the stream
-extension TestEventChannelExtension on EventChannel {
+extension TestEventChannelExtension on TestDefaultBinaryMessenger {
   /// Set a mock stream handler for this channel
-  void setMockStreamHandler(MockStreamHandler handler) {
+  void setMockStreamHandler(EventChannel channel, MockStreamHandler handler) {
     final controller = StreamController<dynamic>();
 
-    MethodChannel(name, codec).setMockMethodCallHandler((call) async {
+    setMockMethodCallHandler(MethodChannel(channel.name, channel.codec),
+        (call) async {
       switch (call.method) {
         case 'listen':
           return handler.onListen(
@@ -24,9 +25,9 @@ extension TestEventChannelExtension on EventChannel {
     });
 
     final sub = controller.stream.listen(
-      (e) => binaryMessenger.handlePlatformMessage(
-        name,
-        codec.encodeSuccessEnvelope(e),
+      (e) => channel.binaryMessenger.handlePlatformMessage(
+        channel.name,
+        channel.codec.encodeSuccessEnvelope(e),
         null,
       ),
     );
@@ -34,9 +35,9 @@ extension TestEventChannelExtension on EventChannel {
       if (e is! PlatformException) {
         throw e;
       }
-      binaryMessenger.handlePlatformMessage(
-        name,
-        codec.encodeErrorEnvelope(
+      channel.binaryMessenger.handlePlatformMessage(
+        channel.name,
+        channel.codec.encodeErrorEnvelope(
           code: e.code,
           message: e.message,
           details: e.details,
@@ -44,7 +45,10 @@ extension TestEventChannelExtension on EventChannel {
         null,
       );
     });
-    sub.onDone(() => binaryMessenger.handlePlatformMessage(name, null, null));
+    sub.onDone(
+      () => channel.binaryMessenger
+          .handlePlatformMessage(channel.name, null, null),
+    );
   }
 }
 

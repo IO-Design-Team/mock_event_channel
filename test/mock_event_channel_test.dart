@@ -9,7 +9,8 @@ void main() {
 
   test('No arguments', () {
     const channel = EventChannel('mock_event_channel');
-    channel.setMockStreamHandler(StreamHandler1());
+    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+        .setMockStreamHandler(channel, StreamHandler1());
 
     final stream = channel.receiveBroadcastStream();
     expectLater(
@@ -29,7 +30,8 @@ void main() {
   test('With arguments', () {
     const channel = EventChannel('mock_event_channel');
     final handler = StreamHandler2();
-    channel.setMockStreamHandler(handler);
+    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+        .setMockStreamHandler(channel, handler);
 
     const arguments = 'asdf';
     final stream = channel.receiveBroadcastStream(arguments);
