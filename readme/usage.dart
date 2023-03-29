@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mock_event_channel/mock_event_channel.dart';
@@ -34,21 +32,5 @@ void main() {
         ],
       ),
     );
-  });
-
-  test('With arguments', () {
-    final canceled = Completer<dynamic>();
-    const channel = EventChannel('mock_event_channel');
-    final handler = InlineMockStreamHandler(
-      onListen: (arguments, events) => events.success(arguments),
-      onCancel: canceled.complete,
-    );
-    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
-        .setMockStreamHandler(channel, handler);
-
-    const arguments = 'asdf';
-    final stream = channel.receiveBroadcastStream(arguments);
-    expectLater(stream, emitsInOrder([arguments]));
-    expectLater(canceled.future, completion(arguments));
   });
 }
