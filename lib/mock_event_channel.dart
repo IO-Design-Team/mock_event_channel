@@ -7,12 +7,13 @@ import 'package:flutter_test/flutter_test.dart';
 extension TestEventChannelExtension on TestDefaultBinaryMessenger {
   /// Set a mock stream handler for this channel
   void setMockStreamHandler(EventChannel channel, MockStreamHandler? handler) {
-    final controller = StreamController<dynamic>();
-
     if (handler == null) {
       setMockMessageHandler(channel.name, null);
       return;
     }
+
+    final controller = StreamController<dynamic>();
+    addTearDown(controller.close);
 
     setMockMethodCallHandler(MethodChannel(channel.name, channel.codec),
         (call) async {
@@ -36,6 +37,7 @@ extension TestEventChannelExtension on TestDefaultBinaryMessenger {
         null,
       ),
     );
+    addTearDown(sub.cancel);
     sub.onError((e) {
       if (e is! PlatformException) {
         throw ArgumentError('Stream error must be a PlatformException');
@@ -54,8 +56,6 @@ extension TestEventChannelExtension on TestDefaultBinaryMessenger {
       () => channel.binaryMessenger
           .handlePlatformMessage(channel.name, null, null),
     );
-    addTearDown(controller.close);
-    addTearDown(sub.cancel);
   }
 }
 
