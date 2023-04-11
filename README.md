@@ -20,7 +20,7 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
         .setMockStreamHandler(
       channel,
-      InlineMockStreamHandler(
+      MockStreamHandler.inline(
         onListen: (arguments, events) {
           events.success('asdf');
           events.error(code: 'asdf');
@@ -49,4 +49,6 @@ void main() {
 
 ## Additional information
 
-This package will be discontinued when this PR gets released to stable: https://github.com/flutter/flutter/pull/123726
+This package will be discontinued when this PR gets released to stable: https://github.com/flutter/flutter/pull/124415
+
+This package is an exact copy of that code, so all you need to do when that PR is released is remove this package from your pubspec.

@@ -12,7 +12,7 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
         .setMockStreamHandler(
       channel,
-      InlineMockStreamHandler(
+      MockStreamHandler.inline(
         onListen: (arguments, events) {
           events.success('asdf');
           events.error(code: 'asdf');
@@ -39,7 +39,7 @@ void main() {
   test('With arguments', () {
     final canceled = Completer<dynamic>();
     const channel = EventChannel('mock_event_channel');
-    final handler = InlineMockStreamHandler(
+    final handler = MockStreamHandler.inline(
       onListen: (arguments, events) => events.success(arguments),
       onCancel: canceled.complete,
     );

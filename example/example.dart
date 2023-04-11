@@ -10,7 +10,7 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
         .setMockStreamHandler(
       channel,
-      InlineMockStreamHandler(
+      MockStreamHandler.inline(
         onListen: (arguments, events) {
           events.success('asdf');
           events.error(code: 'asdf');
