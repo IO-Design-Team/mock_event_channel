@@ -9,7 +9,7 @@ void main() {
 
   test('No arguments', () {
     const channel = EventChannel('mock_event_channel');
-    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockStreamHandler(
       channel,
       MockStreamHandler.inline(
@@ -43,7 +43,7 @@ void main() {
       onListen: (arguments, events) => events.success(arguments),
       onCancel: canceled.complete,
     );
-    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockStreamHandler(channel, handler);
 
     const arguments = 'asdf';

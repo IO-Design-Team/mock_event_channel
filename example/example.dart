@@ -7,7 +7,7 @@ void main() {
 
   test('No arguments', () {
     const channel = EventChannel('mock_event_channel');
-    TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockStreamHandler(
       channel,
       MockStreamHandler.inline(
