@@ -1,3 +1,6 @@
+NOTE: These changes are included in Flutter 3.13.0. This package is no longer needed.
+___
+
 Temporary package to add support for mocking EventChannels in Flutter
 
 ## Features

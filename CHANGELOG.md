@@ -1,3 +1,6 @@
+## 0.1.1+1
+- Adds discontinuation message
+
 ## 0.1.1
 - Fix issues
 
